@@ -10,11 +10,13 @@ export default function Hero() {
             WORKOUT LIBRARY
           </p>
 
-          <h1 className="mt-3 max-w-full font-[var(--font-oswald)] text-[24px] font-bold uppercase leading-[0.95] tracking-[-0.7px] text-white sm:text-[36px] sm:tracking-[-1px] lg:text-[54px] lg:tracking-[-1.2px]">
-            TRAIN WITH INTENT. LOG
-            <br />
-            EVERY SET.
-          </h1>
+<h1 className="mt-3 max-w-full font-[var(--font-oswald)] text-[24px] font-bold uppercase leading-[0.95] tracking-[-0.7px] text-white sm:text-[36px] sm:tracking-[-1px] lg:text-[48px] lg:tracking-[-1px]">
+  <span className="lg:whitespace-nowrap">
+    TRAIN WITH INTENT. LOG
+  </span>
+  <br />
+  EVERY SET.
+</h1>
 
           <p className="mt-4 max-w-[390px] font-[var(--font-inter)] text-[8px] leading-[1.55] text-[#8a92a0] sm:text-[9px] lg:text-[10px]">
             FitLog is a dark, no-nonsense gym companion: pick a lift,
