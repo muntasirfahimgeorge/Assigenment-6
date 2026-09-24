@@ -22,9 +22,9 @@ export default function WorkoutCard({ workout }) {
   return (
     <Link
       href={`/workout/${workout.id}`}
-      className="group block h-[368px] overflow-hidden rounded-2xl border border-[#222630] bg-[#15171d] transition hover:border-[#c2f800]"
+      className="group block overflow-hidden rounded-[5px] border border-[#292d34] bg-[#15171d] transition hover:border-[#c2f800]"
     >
-      <div className="h-48 overflow-hidden">
+      <div className="h-[150px] overflow-hidden">
         <img
           src={workout.image}
           alt={workout.name}
@@ -32,42 +32,42 @@ export default function WorkoutCard({ workout }) {
         />
       </div>
 
-      <div className="h-[174px] p-6">
+      <div className="min-h-[126px] p-3">
 
-        <div className="flex h-[21px] flex-wrap gap-2">
+        <div className="flex min-h-[17px] flex-wrap gap-1">
           {tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex h-[21px] items-center rounded-full bg-[#c2f800] px-[10px] py-[2px] font-[var(--font-inter)] text-[11px] font-bold uppercase leading-[1.5] tracking-[0.55px] text-black"
+              className="inline-flex h-[16px] items-center rounded-[2px] bg-[#c2f800] px-1.5 font-[var(--font-inter)] text-[6px] font-bold uppercase tracking-[0.3px] text-black"
             >
               {tag}
             </span>
           ))}
         </div>
 
-        <h3 className="mt-1 font-[var(--font-oswald)] text-lg font-bold uppercase leading-[1.555] tracking-[0.45px] text-white">
+        <h3 className="mt-1 font-[var(--font-oswald)] text-[11px] font-bold uppercase leading-[1.3] tracking-[0.25px] text-white">
           {workout.name}
         </h3>
 
-        <p className="text-xs leading-[1.333] text-[#9ca3af]">
+        <p className="font-[var(--font-inter)] text-[7px] leading-4 text-[#8a92a0]">
           {workout.equipment}
         </p>
 
-        <div className="mt-4 border-t border-[#222630] pt-3">
-          <div className="flex items-center gap-5 text-xs leading-[1.333] text-[#9ca3af]">
+        <div className="mt-2 border-t border-[#292d34] pt-2">
+          <div className="flex items-center gap-3 font-[var(--font-inter)] text-[7px] text-[#8a92a0]">
 
-            <span className="flex items-center gap-1.5">
-              <Clock3 size={14} />
+            <span className="flex items-center gap-1">
+              <Clock3 size={9} />
               {workout.duration} min
             </span>
 
-            <span className="flex items-center gap-1.5">
-              <Flame size={14} />
+            <span className="flex items-center gap-1">
+              <Flame size={9} />
               {workout.caloriesBurned} kcal
             </span>
 
-            <span className="flex items-center gap-1.5">
-              <Star size={14} />
+            <span className="flex items-center gap-1">
+              <Star size={9} />
               {workout.rating}
             </span>
 

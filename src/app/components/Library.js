@@ -46,27 +46,30 @@ export default function Library() {
   return (
     <section
       id="library"
-      className="mx-auto max-w-[1280px] scroll-mt-20 px-6 pb-16 pt-8"
+      className="mx-auto max-w-[1200px] scroll-mt-20 px-5 pb-12 pt-8 sm:px-6"
     >
-      <div className="mb-8">
-        <h2 className="font-[var(--font-oswald)] text-[30px] font-bold uppercase leading-[1.2] tracking-[-0.75px] text-white">
-          THE LIBRARY
-        </h2>
+      <div className="mb-5 flex items-end justify-between gap-4">
 
-        <p className="mt-1 text-sm leading-5 text-[#9ca3af]">
-          Twelve lifts covering every major muscle group.
-        </p>
-      </div>
+        <div>
+          <h2 className="font-[var(--font-oswald)] text-[24px] font-bold uppercase leading-none tracking-[-0.5px] text-white sm:text-[28px]">
+            THE LIBRARY
+          </h2>
 
-      <div className="mb-8 flex justify-end">
-        <label className="flex h-10 items-center gap-3 border border-[#222630] bg-[#15171d] px-4">
-          <span className="text-xs text-[#8a92a0]">Sort By</span>
+          <p className="mt-1 font-[var(--font-inter)] text-[9px] leading-4 text-[#8a92a0] sm:text-[10px]">
+            Twelve lifts covering every major muscle group.
+          </p>
+        </div>
+
+        <label className="flex h-8 items-center gap-2 border border-[#292d34] bg-[#15171d] px-3">
+          <span className="font-[var(--font-inter)] text-[8px] text-[#8a92a0]">
+            Sort By
+          </span>
 
           <div className="relative">
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value)}
-              className="appearance-none bg-transparent pr-5 text-xs font-medium text-white outline-none"
+              className="appearance-none bg-transparent pr-4 font-[var(--font-inter)] text-[8px] font-medium text-white outline-none"
             >
               <option value="duration" className="bg-[#15171d]">
                 Duration
@@ -82,16 +85,17 @@ export default function Library() {
             </select>
 
             <ChevronDown
-              size={13}
+              size={10}
               className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-[#8a92a0]"
             />
           </div>
         </label>
+
       </div>
 
       {loading && (
         <div className="flex min-h-[400px] items-center justify-center">
-          <div className="h-9 w-9 animate-spin rounded-full border-4 border-[#333] border-t-[#c2f800]" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#333] border-t-[#c2f800]" />
         </div>
       )}
 
@@ -110,7 +114,7 @@ export default function Library() {
       )}
 
       {!loading && workouts.length > 0 && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {displayWorkouts.map((workout) => (
             <WorkoutCard key={workout.id} workout={workout} />
           ))}

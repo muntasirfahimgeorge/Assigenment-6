@@ -1,44 +1,41 @@
 import Link from "next/link";
-import { ArrowDownRight } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 pt-6">
-      <div className="grid min-h-[430px] overflow-hidden rounded-2xl border border-[#222630] bg-[#15171d] lg:grid-cols-2">
+    <section className="mx-auto max-w-[1200px] px-5 pt-6 sm:px-6">
+      <div className="grid min-h-[300px] overflow-hidden rounded-[6px] border border-[#292d34] bg-[#15171d] lg:grid-cols-[58%_42%]">
 
-        <div className="flex flex-col justify-center px-8 py-12 lg:px-12">
+        <div className="flex flex-col justify-center px-7 py-10 sm:px-10 lg:px-12">
 
-          <p className="font-[var(--font-inter)] text-[10px] font-bold uppercase tracking-[0.16em] text-[#c2f800]">
+          <p className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.16em] text-[#c2f800] sm:text-[9px]">
             WORKOUT LIBRARY
           </p>
 
-          <h1 className="mt-4 max-w-[560px] font-[var(--font-oswald)] text-[56px] font-bold uppercase leading-[0.9] tracking-[-1.5px] text-white lg:text-[64px]">
-            TRAIN WITH INTENT.
+          <h1 className="mt-3 whitespace-nowrap font-[var(--font-oswald)] text-[39px] font-bold uppercase leading-[0.88] tracking-[-1.2px] text-white sm:text-[48px] lg:text-[54px]">
+            TRAIN WITH INTENT. LOG
             <br />
-            LOG EVERY SET.
+            EVERY SET.
           </h1>
 
-          <p className="mt-6 max-w-[460px] font-[var(--font-inter)] text-[13px] leading-[1.6] text-[#8a92a0]">
+          <p className="mt-4 max-w-[390px] font-[var(--font-inter)] text-[9px] leading-[1.55] text-[#8a92a0] sm:text-[10px]">
             FitLog is a dark, no-nonsense gym companion: pick a lift,
-            lock it into today&apos;s plan, and watch the week&apos;s work
-            add up.
+            lock it into today&apos;s plan, and watch the week&apos;s work add up.
           </p>
 
           <Link
             href="#library"
-            className="mt-7 flex w-fit items-center gap-2 rounded-md bg-[#c2f800] px-5 py-3 font-[var(--font-inter)] text-[10px] font-bold uppercase tracking-wide text-black transition hover:bg-white"
+            className="mt-5 flex w-fit items-center rounded-[3px] bg-[#c2f800] px-4 py-2.5 font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-wide text-black transition hover:bg-white sm:text-[9px]"
           >
             Browse Workouts
-            <ArrowDownRight size={14} />
           </Link>
 
         </div>
 
-        <div className="relative min-h-[360px] overflow-hidden lg:min-h-0">
+        <div className="relative min-h-[260px] overflow-hidden lg:min-h-0">
           <img
             src="/assets/banner.png"
             alt="FitLog workout"
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full object-cover"
           />
         </div>
 
