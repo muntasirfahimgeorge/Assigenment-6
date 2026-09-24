@@ -15,10 +15,15 @@ export default function Library() {
         if (!response.ok) {
           throw new Error("Failed to fetch workouts");
         }
+
         return response.json();
       })
       .then((data) => {
-        setWorkouts(Array.isArray(data) ? data : []);
+        const orderedWorkouts = [...data].sort(
+          (a, b) => Number(a.id) - Number(b.id)
+        );
+
+        setWorkouts(orderedWorkouts);
         setLoading(false);
       })
       .catch(() => {
@@ -33,14 +38,17 @@ export default function Library() {
     }
 
     if (sortBy === "calories") {
-      return Number(b.caloriesBurned || 0) - Number(a.caloriesBurned || 0);
+      return (
+        Number(b.caloriesBurned || 0) -
+        Number(a.caloriesBurned || 0)
+      );
     }
 
     if (sortBy === "rating") {
       return Number(b.rating || 0) - Number(a.rating || 0);
     }
 
-    return 0;
+    return Number(a.id || 0) - Number(b.id || 0);
   });
 
   return (
@@ -73,9 +81,11 @@ export default function Library() {
               <option value="duration" className="bg-[#15171d]">
                 Duration
               </option>
+
               <option value="calories" className="bg-[#15171d]">
                 Calories
               </option>
+
               <option value="rating" className="bg-[#15171d]">
                 Rating
               </option>
@@ -111,9 +121,9 @@ export default function Library() {
 
       {!loading && workouts.length > 0 && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {displayWorkouts.map((workout, index) => (
+          {displayWorkouts.map((workout) => (
             <WorkoutCard
-              key={`${workout.id}-${index}`}
+              key={workout.id}
               workout={workout}
             />
           ))}

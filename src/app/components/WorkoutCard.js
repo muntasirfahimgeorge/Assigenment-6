@@ -8,14 +8,16 @@ const workoutTags = {
   "Overhead Press": ["SHOULDERS", "ARMS"],
   "Dumbbell Bicep Curl": ["ARMS"],
   "Hollow-Body Plank": ["CORE"],
+  "Burpee": ["FULL BODY"],
   "Conventional Deadlift": ["BACK", "LEGS"],
   "Push-Up": ["CHEST", "ARMS", "CORE"],
   "Walking Lunge": ["LEGS"],
   "Russian Twist": ["CORE"],
+  "Kettlebell Swing": ["FULL BODY", "SHOULDERS"],
 };
 
 export default function WorkoutCard({ workout }) {
-  const tags = workoutTags[workout.name?.trim()] || [];
+  const tags = workoutTags[workout.name?.trim()] || ["FULL BODY"];
 
   return (
     <Link
@@ -31,11 +33,11 @@ export default function WorkoutCard({ workout }) {
       </div>
 
       <div className="min-h-[126px] p-3">
-        <div className="flex min-h-[17px] flex-wrap gap-1">
+        <div className="flex min-h-[18px] flex-wrap gap-1">
           {tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex h-[16px] items-center rounded-[2px] bg-[#c2f800] px-1.5 font-[var(--font-inter)] text-[6px] font-bold uppercase tracking-[0.3px] text-black"
+              className="inline-flex h-[18px] items-center rounded-[2px] bg-[#c2f800] px-2 font-[var(--font-inter)] text-[7px] font-bold uppercase tracking-[0.35px] text-black"
             >
               {tag}
             </span>

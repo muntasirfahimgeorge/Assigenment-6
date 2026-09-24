@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowDown } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -10,7 +9,7 @@ export default function Hero() {
             WORKOUT LIBRARY
           </p>
 
-          <h1 className="mt-3 whitespace-nowrap font-[var(--font-oswald)] text-[34px] font-bold uppercase leading-[0.9] tracking-[-1.2px] text-white sm:text-[48px] lg:text-[54px]">
+          <h1 className="mt-3 whitespace-nowrap font-[var(--font-oswald)] text-[39px] font-bold uppercase leading-[0.88] tracking-[-1.2px] text-white sm:text-[48px] lg:text-[54px]">
             TRAIN WITH INTENT. LOG
             <br />
             EVERY SET.
@@ -26,11 +25,10 @@ export default function Hero() {
             className="mt-5 flex w-fit items-center gap-2 rounded-[3px] bg-[#c2f800] px-4 py-2.5 font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-wide text-black transition hover:bg-white sm:text-[9px]"
           >
             Browse Workouts
-            <ArrowDown size={11} strokeWidth={2.5} />
           </Link>
         </div>
 
-        <div className="relative min-h-[220px] overflow-hidden sm:min-h-[260px] lg:min-h-0">
+        <div className="relative min-h-[260px] overflow-hidden lg:min-h-0">
           <img
             src="/assets/banner.png"
             alt="FitLog workout"
