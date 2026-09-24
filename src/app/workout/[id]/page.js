@@ -2,75 +2,88 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bookmark, Check, ArrowLeft } from "lucide-react";
 import { useParams } from "next/navigation";
+import {
+  ArrowLeft,
+  Bookmark,
+  Check,
+  Clock3,
+  Flame,
+  Star,
+} from "lucide-react";
+import { toast } from "react-toastify";
 import { useFitLog } from "../../components/FitLogContext";
 import { getWorkout } from "../../lib/api";
 
 const workoutTags = {
   "Barbell Bench Press": ["Chest", "Arms"],
   "Pull-Up": ["Back", "Arms"],
-  "Pull-up": ["Back", "Arms"],
   "Back Squat": ["Legs", "Core"],
   "Overhead Press": ["Shoulders", "Arms"],
   "Dumbbell Bicep Curl": ["Arms"],
   "Hollow-Body Plank": ["Core"],
-  "Hollow-body Plank": ["Core"],
+  "Burpee": ["Full Body"],
   "Conventional Deadlift": ["Back", "Legs"],
   "Push-Up": ["Chest", "Arms", "Core"],
-  "Push-up": ["Chest", "Arms", "Core"],
   "Walking Lunge": ["Legs"],
   "Russian Twist": ["Core"],
+  "Kettlebell Swing": ["Full Body", "Shoulders"],
 };
 
 export default function WorkoutDetails() {
-  const { id } = useParams();
+  const params = useParams();
   const { addToPlan, saveWorkout } = useFitLog();
 
   const [workout, setWorkout] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
-
-    setLoading(true);
-
-    getWorkout(id)
-      .then((data) => {
+    async function loadWorkout() {
+      try {
+        const data = await getWorkout(params.id);
         setWorkout(data);
-      })
-      .catch(() => {
+      } catch {
         setWorkout(null);
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
-  }, [id]);
+      }
+    }
+
+    if (params.id) {
+      loadWorkout();
+    }
+  }, [params.id]);
 
   if (loading) {
     return (
       <main className="flex min-h-[70vh] items-center justify-center">
-        <div className="h-9 w-9 animate-spin rounded-full border-4 border-[#333] border-t-[#c2f800]" />
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#333] border-t-[#c2f800]" />
+          <p className="font-[var(--font-inter)] text-[10px] font-bold uppercase tracking-[0.18em] text-[#8a92a0]">
+            Loading workout
+          </p>
+        </div>
       </main>
     );
   }
 
   if (!workout) {
     return (
-      <main className="flex min-h-[70vh] items-center justify-center px-6 text-center">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#c2f800]">
-            404 / NOT FOUND
+      <main className="flex min-h-[70vh] items-center justify-center px-6">
+        <div className="text-center">
+          <p className="font-[var(--font-inter)] text-[10px] font-bold uppercase tracking-[0.2em] text-[#c2f800]">
+            404 / WORKOUT NOT FOUND
           </p>
 
-          <h1 className="mt-3 font-[var(--font-oswald)] text-5xl font-bold uppercase text-white sm:text-6xl">
-            Workout Not Found
+          <h1 className="mt-3 font-[var(--font-oswald)] text-5xl font-bold uppercase leading-none text-white sm:text-7xl">
+            Lost Rep
           </h1>
 
           <Link
             href="/"
-            className="mt-7 inline-flex rounded-[3px] bg-[#c2f800] px-6 py-3 text-[10px] font-bold uppercase text-black transition hover:bg-white"
+            className="mt-7 inline-flex items-center gap-2 rounded-[3px] bg-[#c2f800] px-5 py-3 font-[var(--font-inter)] text-[9px] font-bold uppercase text-black"
           >
+            <ArrowLeft size={12} />
             Back to Workouts
           </Link>
         </div>
@@ -78,148 +91,190 @@ export default function WorkoutDetails() {
     );
   }
 
-  const tags = workoutTags[workout.name] || [];
+  const tags = workoutTags[workout.name?.trim()] || ["Full Body"];
+
+  const handleAddToPlan = () => {
+    addToPlan(workout);
+  };
+
+  const handleSave = () => {
+    saveWorkout(workout);
+  };
+
+  const instructions = Array.isArray(workout.instructions)
+    ? workout.instructions
+    : [];
 
   return (
-    <main className="mx-auto max-w-[1232px] px-6 py-12">
+    <main className="mx-auto max-w-[1200px] px-4 py-6 sm:px-6 sm:py-8">
       <Link
         href="/"
-        className="mb-5 inline-flex items-center gap-1.5 font-[var(--font-inter)] text-[9px] font-medium uppercase text-[#8a92a0] transition hover:text-[#c2f800]"
+        className="mb-5 inline-flex items-center gap-2 font-[var(--font-inter)] text-[9px] font-semibold uppercase tracking-[0.08em] text-[#8a92a0] transition hover:text-[#c2f800]"
       >
-        <ArrowLeft size={11} />
+        <ArrowLeft size={12} />
         Back to Library
       </Link>
 
-      <div className="grid gap-14 lg:grid-cols-[588px_588px]">
-        {/* LEFT - WORKOUT IMAGE */}
-        <div className="overflow-hidden rounded-2xl">
+      <div className="grid overflow-hidden rounded-[6px] border border-[#292d34] bg-[#15171d] lg:grid-cols-[48%_52%]">
+        <div className="min-h-[380px] overflow-hidden sm:min-h-[500px] lg:min-h-[735px]">
           <img
             src={workout.image}
             alt={workout.name}
-            className="h-[773px] w-full object-cover"
+            className="h-full w-full object-cover"
           />
         </div>
 
-        {/* RIGHT - DETAILS */}
-        <div>
-          <h1 className="font-[var(--font-oswald)] text-[36px] font-bold uppercase leading-[1.11] tracking-[-0.9px] text-white">
+        <div className="p-5 sm:p-8 lg:p-10">
+          <p className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.16em] text-[#c2f800]">
+            WORKOUT DETAILS
+          </p>
+
+          <h1 className="mt-3 font-[var(--font-oswald)] text-[32px] font-bold uppercase leading-[0.95] tracking-[-0.8px] text-white sm:text-[42px]">
             {workout.name}
           </h1>
 
-          <p className="mt-4 font-[var(--font-inter)] text-sm leading-[1.43] text-[#8a92a0]">
+          <p className="mt-4 font-[var(--font-inter)] text-[10px] leading-5 text-[#8a92a0] sm:text-[11px]">
             {workout.description}
           </p>
 
-          {/* TAGS */}
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-wrap gap-1.5">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex h-6 items-center rounded-full bg-[#c2f800] px-3.5 text-[11px] font-bold uppercase tracking-[0.55px] text-black"
+                className="inline-flex rounded-[2px] bg-[#c2f800] px-2 py-1 font-[var(--font-inter)] text-[7px] font-bold uppercase tracking-[0.3px] text-black"
               >
                 {tag}
               </span>
             ))}
           </div>
 
-          {/* KEY SPECS - MATCH FIGMA */}
-          <div className="mt-7 overflow-hidden rounded-2xl border border-[#222630] bg-[#15171d]">
-            <DetailRow
-              label="Equipment"
-              value={workout.equipment}
-            />
+          <div className="mt-7 border border-[#292d34]">
+            <div className="grid grid-cols-2">
+              <div className="border-b border-r border-[#292d34] p-3">
+                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
+                  Equipment
+                </p>
+                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
+                  {workout.equipment}
+                </p>
+              </div>
 
-            <DetailRow
-              label="Difficulty"
-              value={workout.difficulty}
-            />
+              <div className="border-b border-[#292d34] p-3">
+                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
+                  Difficulty
+                </p>
+                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
+                  {workout.difficulty}
+                </p>
+              </div>
 
-            <DetailRow
-              label="Sets"
-              value={workout.sets}
-            />
+              <div className="border-b border-r border-[#292d34] p-3">
+                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
+                  Sets
+                </p>
+                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
+                  {workout.sets}
+                </p>
+              </div>
 
-            <DetailRow
-              label="Reps"
-              value={workout.reps}
-            />
+              <div className="border-b border-[#292d34] p-3">
+                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
+                  Reps
+                </p>
+                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
+                  {workout.reps}
+                </p>
+              </div>
 
-            <DetailRow
-              label="Duration"
-              value={`${workout.duration} min`}
-            />
+              <div className="border-r border-[#292d34] p-3">
+                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
+                  Duration
+                </p>
+                <div className="mt-1 flex items-center gap-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
+                  <Clock3 size={10} />
+                  {workout.duration} min
+                </div>
+              </div>
 
-            <DetailRow
-              label="Calories"
-              value={`${workout.caloriesBurned} kcal`}
-            />
+              <div className="p-3">
+                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
+                  Calories
+                </p>
+                <div className="mt-1 flex items-center gap-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
+                  <Flame size={10} />
+                  {workout.caloriesBurned} kcal
+                </div>
+              </div>
 
-            <DetailRow
-              label="Rating"
-              value={workout.rating}
-            />
+              <div className="border-t border-r border-[#292d34] p-3">
+                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
+                  Rating
+                </p>
+                <div className="mt-1 flex items-center gap-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
+                  <Star size={10} />
+                  {workout.rating}
+                </div>
+              </div>
+
+              <div className="border-t border-[#292d34] p-3">
+                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
+                  Muscle Group
+                </p>
+                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
+                  {tags.join(", ")}
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* INSTRUCTIONS */}
-          <section className="mt-0">
-            <h2 className="border-b border-[#222630] py-4 font-[var(--font-inter)] text-base font-extrabold uppercase tracking-[0.8px] text-white">
+          <div className="mt-7">
+            <h2 className="font-[var(--font-oswald)] text-[20px] font-bold uppercase text-white">
               Instructions
             </h2>
 
-            <ol>
-              {workout.instructions?.slice(0, 4).map(
-                (instruction, index) => (
+            <ol className="mt-4 space-y-3">
+              {instructions.length > 0 ? (
+                instructions.map((instruction, index) => (
                   <li
-                    key={index}
-                    className="flex gap-4 border-b border-[#222630] py-3"
+                    key={`${instruction}-${index}`}
+                    className="flex gap-3 font-[var(--font-inter)] text-[9px] leading-5 text-[#8a92a0]"
                   >
-                    <span className="w-4 shrink-0 font-[var(--font-inter)] text-sm font-medium text-white">
-                      {index + 1}.
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[#c2f800] font-[var(--font-inter)] text-[8px] font-bold text-[#c2f800]">
+                      {index + 1}
                     </span>
-
-                    <span className="font-[var(--font-inter)] text-sm leading-6 text-[#8a92a0]">
-                      {instruction}
-                    </span>
+                    <span>{instruction}</span>
                   </li>
-                )
+                ))
+              ) : (
+                <li className="font-[var(--font-inter)] text-[9px] text-[#8a92a0]">
+                  Follow proper form and controlled movement throughout the
+                  exercise.
+                </li>
               )}
             </ol>
-          </section>
+          </div>
 
-          {/* ACTION BUTTONS */}
-          <div className="mt-7 flex flex-wrap gap-4">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button
-              onClick={() => addToPlan(workout)}
-              className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#c2f800] px-6 text-sm font-bold text-black transition hover:bg-white"
+              type="button"
+              onClick={handleAddToPlan}
+              className="inline-flex items-center justify-center gap-2 rounded-[3px] bg-[#c2f800] px-5 py-3 font-[var(--font-inter)] text-[9px] font-bold uppercase text-black transition hover:bg-white"
             >
-              <Check size={16} />
+              <Check size={13} />
               Add to today&apos;s plan
             </button>
 
             <button
-              onClick={() => saveWorkout(workout)}
-              className="flex h-[46px] items-center justify-center gap-2 rounded-xl border border-[#374151] px-6 text-sm font-medium text-white transition hover:border-[#c2f800] hover:text-[#c2f800]"
+              type="button"
+              onClick={handleSave}
+              className="inline-flex items-center justify-center gap-2 rounded-[3px] border border-[#343943] px-5 py-3 font-[var(--font-inter)] text-[9px] font-bold uppercase text-white transition hover:border-[#c2f800] hover:text-[#c2f800]"
             >
-              <Bookmark size={16} />
+              <Bookmark size={13} />
               Save for later
             </button>
           </div>
         </div>
       </div>
     </main>
-  );
-}
-
-function DetailRow({ label, value }) {
-  return (
-    <div className="flex min-h-[49px] items-center justify-between border-b border-[#222630] px-6 last:border-b-0">
-      <span className="font-[var(--font-inter)] text-xs font-bold uppercase tracking-[0.08em] text-[#8a92a0]">
-        {label}
-      </span>
-
-      <span className="font-[var(--font-inter)] text-sm font-medium text-white">
-        {value}
-      </span>
-    </div>
   );
 }

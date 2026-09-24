@@ -13,68 +13,73 @@ export default function Navbar() {
 
   const isPlanActive = pathname === "/my-plan";
 
-  const workoutClass = isWorkoutActive
-    ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800]"
-    : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#8a92a0]";
-
-  const planClass = isPlanActive
-    ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800]"
-    : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#8a92a0]";
-
   return (
-    <header className="border-b border-[#222630] bg-[#08090b]">
-      <div className="mx-auto flex h-[46px] max-w-[1200px] items-center justify-between px-5 sm:px-6">
-        <Link href="/" className="flex items-center gap-2">
+    <header className="border-b border-[#1b1f28] bg-[#0f1115]">
+      <div className="mx-auto flex h-[56px] w-full max-w-[1280px] items-center justify-between gap-3 px-3 sm:h-[64px] sm:px-5 lg:h-[80px] lg:px-6">
+        <Link href="/" className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <img
             src="/assets/logo.png"
             alt="FitLog"
-            className="h-6 w-6 object-contain"
+            className="h-5 w-5 object-contain sm:h-6 sm:w-6 lg:h-7 lg:w-7"
           />
 
-          <span className="font-[var(--font-inter)] text-[10px] font-extrabold tracking-[1px] text-white">
+          <span className="font-[var(--font-oswald)] text-[13px] font-bold tracking-[0.8px] text-white sm:text-[16px] lg:text-[20px]">
             FITLOG
           </span>
         </Link>
 
-        {/* Desktop navigation */}
-        <nav className="hidden items-center gap-7 md:flex">
-          <Link href="/" className={workoutClass}>
+        <nav className="flex shrink-0 items-center gap-4 sm:gap-6 lg:gap-8">
+          <Link
+            href="/"
+            className={
+              isWorkoutActive
+                ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800] sm:text-[10px] lg:text-[12px]"
+                : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#8a92a0] sm:text-[10px] lg:text-[12px]"
+            }
+          >
             Workout
           </Link>
 
-          <Link href="/my-plan" className={planClass}>
+          <Link
+            href="/my-plan"
+            className={
+              isPlanActive
+                ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800] sm:text-[10px] lg:text-[12px]"
+                : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#d1d5db] sm:text-[10px] lg:text-[12px]"
+            }
+          >
             My Plan
           </Link>
         </nav>
 
-        {/* Counters */}
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-4 lg:gap-6">
           <Link
             href="/my-plan"
-            className="rounded-full bg-[#c2f800] px-3 py-1.5 font-[var(--font-inter)] text-[7px] font-bold uppercase text-black"
+            className="flex items-center gap-1 sm:gap-2"
           >
-            Plan {plan.length}
+            <span className="font-[var(--font-inter)] text-[7px] font-medium text-[#d1d5db] sm:text-[10px] lg:text-[12px]">
+              Plan
+            </span>
+
+            <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#c2f800] px-1 font-[var(--font-inter)] text-[8px] font-semibold leading-none text-black sm:h-5 sm:min-w-5 sm:text-[10px]">
+              {plan.length}
+            </span>
           </Link>
 
           <Link
             href="/my-plan"
-            className="rounded-full border border-[#c2f800] px-3 py-1.5 font-[var(--font-inter)] text-[7px] font-bold uppercase text-white"
+            className="flex items-center gap-1 sm:gap-2"
           >
-            Saved {saved.length}
+            <span className="font-[var(--font-inter)] text-[7px] font-medium text-[#9ca3af] sm:text-[10px] lg:text-[12px]">
+              Saved
+            </span>
+
+            <span className="flex h-4 min-w-4 items-center justify-center rounded-full border border-[#c2f800] px-1 font-[var(--font-inter)] text-[8px] font-semibold leading-none text-[#c2f800] sm:h-5 sm:min-w-5 sm:text-[10px]">
+              {saved.length}
+            </span>
           </Link>
         </div>
       </div>
-
-      {/* Mobile navigation */}
-      <nav className="flex items-center justify-center gap-7 border-t border-[#222630] py-2 md:hidden">
-        <Link href="/" className={workoutClass}>
-          Workout
-        </Link>
-
-        <Link href="/my-plan" className={planClass}>
-          My Plan
-        </Link>
-      </nav>
     </header>
   );
 }
