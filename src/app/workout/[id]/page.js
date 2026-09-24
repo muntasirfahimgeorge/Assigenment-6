@@ -2,16 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ArrowLeft, Bookmark, Check } from "lucide-react";
 import { useParams } from "next/navigation";
-import {
-  ArrowLeft,
-  Bookmark,
-  Check,
-  Clock3,
-  Flame,
-  Star,
-} from "lucide-react";
-import { toast } from "react-toastify";
 import { useFitLog } from "../../components/FitLogContext";
 import { getWorkout } from "../../lib/api";
 
@@ -22,7 +14,7 @@ const workoutTags = {
   "Overhead Press": ["Shoulders", "Arms"],
   "Dumbbell Bicep Curl": ["Arms"],
   "Hollow-Body Plank": ["Core"],
-  "Burpee": ["Full Body"],
+  Burpee: ["Full Body"],
   "Conventional Deadlift": ["Back", "Legs"],
   "Push-Up": ["Chest", "Arms", "Core"],
   "Walking Lunge": ["Legs"],
@@ -93,14 +85,6 @@ export default function WorkoutDetails() {
 
   const tags = workoutTags[workout.name?.trim()] || ["Full Body"];
 
-  const handleAddToPlan = () => {
-    addToPlan(workout);
-  };
-
-  const handleSave = () => {
-    saveWorkout(workout);
-  };
-
   const instructions = Array.isArray(workout.instructions)
     ? workout.instructions
     : [];
@@ -148,82 +132,68 @@ export default function WorkoutDetails() {
             ))}
           </div>
 
-          <div className="mt-7 border border-[#292d34]">
-            <div className="grid grid-cols-2">
-              <div className="border-b border-r border-[#292d34] p-3">
-                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
-                  Equipment
-                </p>
-                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
-                  {workout.equipment}
-                </p>
-              </div>
+          <div className="mt-7 overflow-hidden rounded-[8px] border border-[#292d34] bg-[#15171d]">
+            <div className="flex min-h-[52px] items-center justify-between gap-4 border-b border-[#292d34] px-5 py-3">
+              <span className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.08em] text-[#8a92a0] sm:text-[9px]">
+                Equipment
+              </span>
+              <span className="text-right font-[var(--font-inter)] text-[9px] font-medium text-white sm:text-[10px]">
+                {workout.equipment}
+              </span>
+            </div>
 
-              <div className="border-b border-[#292d34] p-3">
-                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
-                  Difficulty
-                </p>
-                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
-                  {workout.difficulty}
-                </p>
-              </div>
+            <div className="flex min-h-[52px] items-center justify-between gap-4 border-b border-[#292d34] px-5 py-3">
+              <span className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.08em] text-[#8a92a0] sm:text-[9px]">
+                Difficulty
+              </span>
+              <span className="text-right font-[var(--font-inter)] text-[9px] font-medium text-white sm:text-[10px]">
+                {workout.difficulty}
+              </span>
+            </div>
 
-              <div className="border-b border-r border-[#292d34] p-3">
-                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
-                  Sets
-                </p>
-                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
-                  {workout.sets}
-                </p>
-              </div>
+            <div className="flex min-h-[52px] items-center justify-between gap-4 border-b border-[#292d34] px-5 py-3">
+              <span className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.08em] text-[#8a92a0] sm:text-[9px]">
+                Sets
+              </span>
+              <span className="text-right font-[var(--font-inter)] text-[9px] font-medium text-white sm:text-[10px]">
+                {workout.sets}
+              </span>
+            </div>
 
-              <div className="border-b border-[#292d34] p-3">
-                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
-                  Reps
-                </p>
-                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
-                  {workout.reps}
-                </p>
-              </div>
+            <div className="flex min-h-[52px] items-center justify-between gap-4 border-b border-[#292d34] px-5 py-3">
+              <span className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.08em] text-[#8a92a0] sm:text-[9px]">
+                Reps
+              </span>
+              <span className="text-right font-[var(--font-inter)] text-[9px] font-medium text-white sm:text-[10px]">
+                {workout.reps}
+              </span>
+            </div>
 
-              <div className="border-r border-[#292d34] p-3">
-                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
-                  Duration
-                </p>
-                <div className="mt-1 flex items-center gap-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
-                  <Clock3 size={10} />
-                  {workout.duration} min
-                </div>
-              </div>
+            <div className="flex min-h-[52px] items-center justify-between gap-4 border-b border-[#292d34] px-5 py-3">
+              <span className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.08em] text-[#8a92a0] sm:text-[9px]">
+                Duration
+              </span>
+              <span className="text-right font-[var(--font-inter)] text-[9px] font-medium text-white sm:text-[10px]">
+                {workout.duration} min
+              </span>
+            </div>
 
-              <div className="p-3">
-                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
-                  Calories
-                </p>
-                <div className="mt-1 flex items-center gap-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
-                  <Flame size={10} />
-                  {workout.caloriesBurned} kcal
-                </div>
-              </div>
+            <div className="flex min-h-[52px] items-center justify-between gap-4 border-b border-[#292d34] px-5 py-3">
+              <span className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.08em] text-[#8a92a0] sm:text-[9px]">
+                Calories
+              </span>
+              <span className="text-right font-[var(--font-inter)] text-[9px] font-medium text-white sm:text-[10px]">
+                {workout.caloriesBurned} kcal
+              </span>
+            </div>
 
-              <div className="border-t border-r border-[#292d34] p-3">
-                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
-                  Rating
-                </p>
-                <div className="mt-1 flex items-center gap-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
-                  <Star size={10} />
-                  {workout.rating}
-                </div>
-              </div>
-
-              <div className="border-t border-[#292d34] p-3">
-                <p className="font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#8a92a0]">
-                  Muscle Group
-                </p>
-                <p className="mt-1 font-[var(--font-inter)] text-[9px] font-medium text-white">
-                  {tags.join(", ")}
-                </p>
-              </div>
+            <div className="flex min-h-[52px] items-center justify-between gap-4 px-5 py-3">
+              <span className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.08em] text-[#8a92a0] sm:text-[9px]">
+                Rating
+              </span>
+              <span className="text-right font-[var(--font-inter)] text-[9px] font-medium text-white sm:text-[10px]">
+                {workout.rating}
+              </span>
             </div>
           </div>
 
@@ -246,7 +216,7 @@ export default function WorkoutDetails() {
                   </li>
                 ))
               ) : (
-                <li className="font-[var(--font-inter)] text-[9px] text-[#8a92a0]">
+                <li className="font-[var(--font-inter)] text-[9px] leading-5 text-[#8a92a0]">
                   Follow proper form and controlled movement throughout the
                   exercise.
                 </li>
@@ -257,7 +227,7 @@ export default function WorkoutDetails() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
-              onClick={handleAddToPlan}
+              onClick={() => addToPlan(workout)}
               className="inline-flex items-center justify-center gap-2 rounded-[3px] bg-[#c2f800] px-5 py-3 font-[var(--font-inter)] text-[9px] font-bold uppercase text-black transition hover:bg-white"
             >
               <Check size={13} />
@@ -266,7 +236,7 @@ export default function WorkoutDetails() {
 
             <button
               type="button"
-              onClick={handleSave}
+              onClick={() => saveWorkout(workout)}
               className="inline-flex items-center justify-center gap-2 rounded-[3px] border border-[#343943] px-5 py-3 font-[var(--font-inter)] text-[9px] font-bold uppercase text-white transition hover:border-[#c2f800] hover:text-[#c2f800]"
             >
               <Bookmark size={13} />
