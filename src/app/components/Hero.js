@@ -9,7 +9,7 @@ export default function Hero() {
             WORKOUT LIBRARY
           </p>
 
-          <h1 className="mt-3 whitespace-nowrap font-[var(--font-oswald)] text-[39px] font-bold uppercase leading-[0.88] tracking-[-1.2px] text-white sm:text-[48px] lg:text-[54px]">
+          <h1 className="mt-3 font-[var(--font-oswald)] text-[39px] font-bold uppercase leading-[0.88] tracking-[-1.2px] text-white sm:text-[48px] lg:text-[54px]">
             TRAIN WITH INTENT. LOG
             <br />
             EVERY SET.
@@ -17,13 +17,12 @@ export default function Hero() {
 
           <p className="mt-4 max-w-[390px] font-[var(--font-inter)] text-[9px] leading-[1.55] text-[#8a92a0] sm:text-[10px]">
             FitLog is a dark, no-nonsense gym companion: pick a lift,
-            lock it into today&apos;s plan, and watch the week&apos;s work add
-            up.
+            lock it into today&apos;s plan, and watch the week&apos;s work add up.
           </p>
 
           <Link
             href="#library"
-            className="mt-5 flex w-fit rounded-[3px] bg-[#c2f800] px-4 py-2.5 font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-wide text-black transition hover:bg-white sm:text-[9px]"
+            className="mt-5 flex w-fit items-center gap-2 rounded-[3px] bg-[#c2f800] px-4 py-2.5 font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-wide text-black transition hover:bg-white sm:text-[9px]"
           >
             Browse Workouts
           </Link>
@@ -33,7 +32,7 @@ export default function Hero() {
           <img
             src="/assets/banner.png"
             alt="FitLog workout"
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full object-cover"
           />
         </div>
       </div>
