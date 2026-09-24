@@ -7,7 +7,7 @@ import WorkoutCard from "./WorkoutCard";
 export default function Library() {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState("");
+  const [sortBy, setSortBy] = useState("duration");
 
   useEffect(() => {
     fetch("https://api.abcz.workers.dev/api/fitlog")
@@ -27,59 +27,21 @@ export default function Library() {
       });
   }, []);
 
-  const defaultOrder = [
-    "Barbell Bench Press",
-    "Pull-up",
-    "Back Squat",
-    "Overhead Press",
-    "Dumbbell Bicep Curl",
-    "Dumbbell Bicep Curl",
-    "Hollow-Body Plank",
-    "Dumbbell Bicep Curl",
-    "Conventional Deadlift",
-    "Push-up",
-    "Walking Lunge",
-    "Russian Twist",
-  ];
+  const displayWorkouts = [...workouts].sort((a, b) => {
+    if (sortBy === "duration") {
+      return Number(a.duration || 0) - Number(b.duration || 0);
+    }
 
-  const findWorkout = (name) => {
-    return workouts.find(
-      (workout) =>
-        workout.name.toLowerCase() === name.toLowerCase()
-    );
-  };
+    if (sortBy === "calories") {
+      return Number(b.caloriesBurned || 0) - Number(a.caloriesBurned || 0);
+    }
 
-  const orderedWorkouts = defaultOrder
-    .map((name) => findWorkout(name))
-    .filter(Boolean);
+    if (sortBy === "rating") {
+      return Number(b.rating || 0) - Number(a.rating || 0);
+    }
 
-  const displayWorkouts =
-    sortBy === ""
-      ? orderedWorkouts
-      : [...workouts].sort((a, b) => {
-          if (sortBy === "duration") {
-            return (
-              Number(a.duration || 0) -
-              Number(b.duration || 0)
-            );
-          }
-
-          if (sortBy === "calories") {
-            return (
-              Number(b.caloriesBurned || 0) -
-              Number(a.caloriesBurned || 0)
-            );
-          }
-
-          if (sortBy === "rating") {
-            return (
-              Number(b.rating || 0) -
-              Number(a.rating || 0)
-            );
-          }
-
-          return 0;
-        });
+    return 0;
+  });
 
   return (
     <section
@@ -98,9 +60,7 @@ export default function Library() {
 
       <div className="mb-8 flex justify-end">
         <label className="flex h-10 items-center gap-3 border border-[#222630] bg-[#15171d] px-4">
-          <span className="text-xs text-[#8a92a0]">
-            Sort By
-          </span>
+          <span className="text-xs text-[#8a92a0]">Sort By</span>
 
           <div className="relative">
             <select
@@ -108,10 +68,6 @@ export default function Library() {
               onChange={(event) => setSortBy(event.target.value)}
               className="appearance-none bg-transparent pr-5 text-xs font-medium text-white outline-none"
             >
-              <option value="" className="bg-[#15171d]">
-                Select
-              </option>
-
               <option value="duration" className="bg-[#15171d]">
                 Duration
               </option>
@@ -155,11 +111,8 @@ export default function Library() {
 
       {!loading && workouts.length > 0 && (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {displayWorkouts.map((workout, index) => (
-            <WorkoutCard
-              key={`${workout.id}-${index}`}
-              workout={workout}
-            />
+          {displayWorkouts.map((workout) => (
+            <WorkoutCard key={workout.id} workout={workout} />
           ))}
         </div>
       )}
