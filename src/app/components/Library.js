@@ -7,7 +7,7 @@ import WorkoutCard from "./WorkoutCard";
 export default function Library() {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState("default");
+  const [sortBy, setSortBy] = useState("duration");
 
   useEffect(() => {
     fetch("https://api.abcz.workers.dev/api/fitlog")
@@ -15,60 +15,33 @@ export default function Library() {
         if (!response.ok) {
           throw new Error("Failed to fetch workouts");
         }
-
         return response.json();
       })
       .then((data) => {
-        const requiredOrder = [
-          "Barbell Bench Press",
-          "Pull-Up",
-          "Back Squat",
-          "Overhead Press",
-          "Dumbbell Bicep Curl",
-          "Dumbbell Bicep Curl",
-          "Hollow-Body Plank",
-          "Dumbbell Bicep Curl",
-          "Conventional Deadlift",
-          "Push-Up",
-          "Walking Lunge",
-          "Russian Twist",
-        ];
-
-        const orderedWorkouts = requiredOrder.map((name, index) => {
-          const sameNameWorkouts = data.filter(
-            (workout) =>
-              workout.name?.trim().toLowerCase() === name.toLowerCase()
-          );
-
-          return sameNameWorkouts[index] || sameNameWorkouts[0];
-        });
-
-        setWorkouts(orderedWorkouts.filter(Boolean));
+        setWorkouts(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch(() => {
+        setWorkouts([]);
         setLoading(false);
       });
   }, []);
 
-  const displayWorkouts =
-    sortBy === "default"
-      ? workouts
-      : [...workouts].sort((a, b) => {
-          if (sortBy === "duration") {
-            return Number(a.duration || 0) - Number(b.duration || 0);
-          }
+  const displayWorkouts = [...workouts].sort((a, b) => {
+    if (sortBy === "duration") {
+      return Number(a.duration || 0) - Number(b.duration || 0);
+    }
 
-          if (sortBy === "calories") {
-            return Number(b.caloriesBurned || 0) - Number(a.caloriesBurned || 0);
-          }
+    if (sortBy === "calories") {
+      return Number(b.caloriesBurned || 0) - Number(a.caloriesBurned || 0);
+    }
 
-          if (sortBy === "rating") {
-            return Number(b.rating || 0) - Number(a.rating || 0);
-          }
+    if (sortBy === "rating") {
+      return Number(b.rating || 0) - Number(a.rating || 0);
+    }
 
-          return 0;
-        });
+    return 0;
+  });
 
   return (
     <section
@@ -86,7 +59,7 @@ export default function Library() {
           </p>
         </div>
 
-        <label className="flex h-8 items-center gap-2 border border-[#292d34] bg-[#15171d] px-3">
+        <label className="flex h-8 shrink-0 items-center gap-2 border border-[#292d34] bg-[#15171d] px-3">
           <span className="font-[var(--font-inter)] text-[8px] text-[#8a92a0]">
             Sort By
           </span>
@@ -97,18 +70,12 @@ export default function Library() {
               onChange={(event) => setSortBy(event.target.value)}
               className="appearance-none bg-transparent pr-4 font-[var(--font-inter)] text-[8px] font-medium text-white outline-none"
             >
-              <option value="default" className="bg-[#15171d]">
-                Default
-              </option>
-
               <option value="duration" className="bg-[#15171d]">
                 Duration
               </option>
-
               <option value="calories" className="bg-[#15171d]">
                 Calories
               </option>
-
               <option value="rating" className="bg-[#15171d]">
                 Rating
               </option>
@@ -131,7 +98,7 @@ export default function Library() {
       {!loading && workouts.length === 0 && (
         <div className="flex min-h-[400px] items-center justify-center text-center">
           <div>
-            <h3 className="font-[var(--font-oswald)] text-2xl font-bold uppercase">
+            <h3 className="font-[var(--font-oswald)] text-2xl font-bold uppercase text-white">
               NO WORKOUTS FOUND
             </h3>
 
@@ -148,7 +115,6 @@ export default function Library() {
             <WorkoutCard
               key={`${workout.id}-${index}`}
               workout={workout}
-              position={index}
             />
           ))}
         </div>
