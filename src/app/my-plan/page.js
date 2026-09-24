@@ -1,9 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Clock3, Flame, Star, Check, X } from "lucide-react";
 import { useFitLog } from "../components/FitLogContext";
-import { useState } from "react";
 
 export default function MyPlan() {
   const {
@@ -18,20 +18,6 @@ export default function MyPlan() {
 
   const [activeTab, setActiveTab] = useState("plan");
 
-  if (!loaded) {
-    return (
-      <main className="flex min-h-[70vh] items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#333] border-t-[#c2f800]" />
-
-          <p className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.15em] text-[#8a92a0]">
-            Loading workouts...
-          </p>
-        </div>
-      </main>
-    );
-  }
-
   const currentItems = activeTab === "plan" ? plan : saved;
 
   const totalMinutes = plan.reduce(
@@ -43,6 +29,20 @@ export default function MyPlan() {
     (total, item) => total + Number(item.caloriesBurned || 0),
     0
   );
+
+  if (!loaded) {
+    return (
+      <main className="flex min-h-[70vh] items-center justify-center px-5">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#333] border-t-[#c2f800]" />
+
+          <p className="font-[var(--font-inter)] text-[9px] font-bold uppercase tracking-[0.15em] text-[#8a92a0]">
+            Loading workouts...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto min-h-[70vh] max-w-[1000px] px-5 py-9 sm:px-6">
@@ -58,7 +58,9 @@ export default function MyPlan() {
 
       <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
         <Metric label="Exercises" value={plan.length} />
+
         <Metric label="Minutes" value={totalMinutes} />
+
         <Metric label="Calories" value={totalCalories} />
       </div>
 
@@ -107,81 +109,87 @@ export default function MyPlan() {
         </div>
       ) : (
         <div className="mt-5 space-y-3">
-          {currentItems.map((workout) => (
-            <div
-              key={workout.id}
-              className="flex flex-col overflow-hidden rounded-[4px] border border-[#292d34] bg-[#15171d] sm:flex-row"
-            >
-              <img
-                src={workout.image}
-                alt={workout.name}
-                className="h-[150px] w-full object-cover sm:h-[120px] sm:w-[180px]"
-              />
+          {currentItems.map((workout) => {
+            const isDone = done.includes(workout.id);
 
-              <div className="flex flex-1 flex-col justify-between p-4">
-                <div>
-                  <h3 className="font-[var(--font-oswald)] text-[15px] font-bold uppercase leading-none text-white">
-                    {workout.name}
-                  </h3>
+            return (
+              <div
+                key={workout.id}
+                className="flex flex-col overflow-hidden rounded-[4px] border border-[#292d34] bg-[#15171d] sm:flex-row"
+              >
+                <img
+                  src={workout.image}
+                  alt={workout.name}
+                  className="h-[150px] w-full object-cover sm:h-[120px] sm:w-[180px]"
+                />
 
-                  <p className="mt-1 font-[var(--font-inter)] text-[8px] text-[#8a92a0]">
-                    {workout.equipment}
-                  </p>
+                <div className="flex flex-1 flex-col justify-between p-4">
+                  <div>
+                    <h3 className="font-[var(--font-oswald)] text-[15px] font-bold uppercase leading-none text-white">
+                      {workout.name}
+                    </h3>
 
-                  <div className="mt-3 flex items-center gap-4 font-[var(--font-inter)] text-[7px] text-[#8a92a0]">
-                    <span className="flex items-center gap-1">
-                      <Clock3 size={9} />
-                      {workout.duration} min
-                    </span>
+                    <p className="mt-1 font-[var(--font-inter)] text-[8px] text-[#8a92a0]">
+                      {workout.equipment}
+                    </p>
 
-                    <span className="flex items-center gap-1">
-                      <Flame size={9} />
-                      {workout.caloriesBurned} kcal
-                    </span>
+                    <div className="mt-3 flex items-center gap-4 font-[var(--font-inter)] text-[7px] text-[#8a92a0]">
+                      <span className="flex items-center gap-1">
+                        <Clock3 size={9} />
+                        {workout.duration} min
+                      </span>
 
-                    <span className="flex items-center gap-1">
-                      <Star size={9} />
-                      {workout.rating}
-                    </span>
+                      <span className="flex items-center gap-1">
+                        <Flame size={9} />
+                        {workout.caloriesBurned} kcal
+                      </span>
+
+                      <span className="flex items-center gap-1">
+                        <Star size={9} />
+                        {workout.rating}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Link
+                      href={`/workout/${workout.id}`}
+                      className="rounded-[2px] bg-[#c2f800] px-3 py-2 font-[var(--font-inter)] text-[7px] font-bold uppercase text-black"
+                    >
+                      View Details
+                    </Link>
+
+                    {activeTab === "plan" && (
+                      <button
+                        onClick={() => markAsDone(workout.id)}
+                        disabled={isDone}
+                        className={
+                          isDone
+                            ? "flex cursor-default items-center gap-1 rounded-[2px] border border-[#c2f800] px-3 py-2 font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#c2f800]"
+                            : "flex items-center gap-1 rounded-[2px] border border-[#343943] px-3 py-2 font-[var(--font-inter)] text-[7px] font-bold uppercase text-white hover:border-[#c2f800] hover:text-[#c2f800]"
+                        }
+                      >
+                        <Check size={9} />
+                        {isDone ? "Done" : "Mark as Done"}
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() =>
+                        activeTab === "plan"
+                          ? removeFromPlan(workout.id)
+                          : removeSaved(workout.id)
+                      }
+                      aria-label={`Remove ${workout.name}`}
+                      className="flex items-center justify-center rounded-[2px] border border-[#343943] px-2 py-2 text-[#8a92a0] hover:border-red-400 hover:text-red-400"
+                    >
+                      <X size={11} />
+                    </button>
                   </div>
                 </div>
-
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Link
-                    href={`/workout/${workout.id}`}
-                    className="rounded-[2px] bg-[#c2f800] px-3 py-2 font-[var(--font-inter)] text-[7px] font-bold uppercase text-black"
-                  >
-                    View Details
-                  </Link>
-
-                  {activeTab === "plan" && (
-                    <button
-                      onClick={() => markAsDone(workout.id)}
-                      className={
-                        done.includes(workout.id)
-                          ? "flex items-center gap-1 rounded-[2px] border border-[#c2f800] px-3 py-2 font-[var(--font-inter)] text-[7px] font-bold uppercase text-[#c2f800]"
-                          : "flex items-center gap-1 rounded-[2px] border border-[#343943] px-3 py-2 font-[var(--font-inter)] text-[7px] font-bold uppercase text-white"
-                      }
-                    >
-                      <Check size={9} />
-                      {done.includes(workout.id) ? "Done" : "Mark as Done"}
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() =>
-                      activeTab === "plan"
-                        ? removeFromPlan(workout.id)
-                        : removeSaved(workout.id)
-                    }
-                    className="flex items-center justify-center rounded-[2px] border border-[#343943] px-2 py-2 text-[#8a92a0] hover:border-red-400 hover:text-red-400"
-                  >
-                    <X size={11} />
-                  </button>
-                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </main>

@@ -4,9 +4,7 @@ export default function Hero() {
   return (
     <section className="mx-auto max-w-[1200px] px-5 pt-6 sm:px-6">
       <div className="grid min-h-[300px] overflow-hidden rounded-[6px] border border-[#292d34] bg-[#15171d] lg:grid-cols-[58%_42%]">
-
         <div className="flex flex-col justify-center px-7 py-10 sm:px-10 lg:px-12">
-
           <p className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.16em] text-[#c2f800] sm:text-[9px]">
             WORKOUT LIBRARY
           </p>
@@ -19,26 +17,25 @@ export default function Hero() {
 
           <p className="mt-4 max-w-[390px] font-[var(--font-inter)] text-[9px] leading-[1.55] text-[#8a92a0] sm:text-[10px]">
             FitLog is a dark, no-nonsense gym companion: pick a lift,
-            lock it into today&apos;s plan, and watch the week&apos;s work add up.
+            lock it into today&apos;s plan, and watch the week&apos;s work add
+            up.
           </p>
 
           <Link
             href="#library"
-            className="mt-5 flex w-fit items-center rounded-[3px] bg-[#c2f800] px-4 py-2.5 font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-wide text-black transition hover:bg-white sm:text-[9px]"
+            className="mt-5 flex w-fit rounded-[3px] bg-[#c2f800] px-4 py-2.5 font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-wide text-black transition hover:bg-white sm:text-[9px]"
           >
             Browse Workouts
           </Link>
-
         </div>
 
         <div className="relative min-h-[260px] overflow-hidden lg:min-h-0">
           <img
             src="/assets/banner.png"
             alt="FitLog workout"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover object-center"
           />
         </div>
-
       </div>
     </section>
   );

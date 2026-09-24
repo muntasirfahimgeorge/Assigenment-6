@@ -8,6 +8,19 @@ export default function Navbar() {
   const pathname = usePathname();
   const { plan, saved } = useFitLog();
 
+  const isWorkoutActive =
+    pathname === "/" || pathname.startsWith("/workout/");
+
+  const isPlanActive = pathname === "/my-plan";
+
+  const workoutClass = isWorkoutActive
+    ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800]"
+    : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#8a92a0]";
+
+  const planClass = isPlanActive
+    ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800]"
+    : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#8a92a0]";
+
   return (
     <header className="border-b border-[#222630] bg-[#08090b]">
       <div className="mx-auto flex h-[46px] max-w-[1200px] items-center justify-between px-5 sm:px-6">
@@ -23,30 +36,18 @@ export default function Navbar() {
           </span>
         </Link>
 
+        {/* Desktop navigation */}
         <nav className="hidden items-center gap-7 md:flex">
-          <Link
-            href="/"
-            className={
-              pathname === "/"
-                ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800]"
-                : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#8a92a0]"
-            }
-          >
+          <Link href="/" className={workoutClass}>
             Workout
           </Link>
 
-          <Link
-            href="/my-plan"
-            className={
-              pathname === "/my-plan"
-                ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800]"
-                : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#8a92a0]"
-            }
-          >
+          <Link href="/my-plan" className={planClass}>
             My Plan
           </Link>
         </nav>
 
+        {/* Counters */}
         <div className="flex items-center gap-2">
           <Link
             href="/my-plan"
@@ -64,26 +65,13 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Mobile navigation */}
       <nav className="flex items-center justify-center gap-7 border-t border-[#222630] py-2 md:hidden">
-        <Link
-          href="/"
-          className={
-            pathname === "/"
-              ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800]"
-              : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#8a92a0]"
-          }
-        >
+        <Link href="/" className={workoutClass}>
           Workout
         </Link>
 
-        <Link
-          href="/my-plan"
-          className={
-            pathname === "/my-plan"
-              ? "font-[var(--font-inter)] text-[8px] font-bold uppercase text-[#c2f800]"
-              : "font-[var(--font-inter)] text-[8px] font-medium uppercase text-[#8a92a0]"
-          }
-        >
+        <Link href="/my-plan" className={planClass}>
           My Plan
         </Link>
       </nav>

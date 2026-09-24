@@ -4,20 +4,18 @@ import { Clock3, Flame, Star } from "lucide-react";
 const workoutTags = {
   "Barbell Bench Press": ["CHEST", "ARMS"],
   "Pull-Up": ["BACK", "ARMS"],
-  "Pull-up": ["BACK", "ARMS"],
   "Back Squat": ["LEGS", "CORE"],
   "Overhead Press": ["SHOULDERS", "ARMS"],
   "Dumbbell Bicep Curl": ["ARMS"],
   "Hollow-Body Plank": ["CORE"],
   "Conventional Deadlift": ["BACK", "LEGS"],
   "Push-Up": ["CHEST", "ARMS", "CORE"],
-  "Push-up": ["CHEST", "ARMS", "CORE"],
   "Walking Lunge": ["LEGS"],
   "Russian Twist": ["CORE"],
 };
 
 export default function WorkoutCard({ workout }) {
-  const tags = workoutTags[workout.name] || [];
+  const tags = workoutTags[workout.name?.trim()] || [];
 
   return (
     <Link
@@ -33,7 +31,6 @@ export default function WorkoutCard({ workout }) {
       </div>
 
       <div className="min-h-[126px] p-3">
-
         <div className="flex min-h-[17px] flex-wrap gap-1">
           {tags.map((tag) => (
             <span
@@ -55,7 +52,6 @@ export default function WorkoutCard({ workout }) {
 
         <div className="mt-2 border-t border-[#292d34] pt-2">
           <div className="flex items-center gap-3 font-[var(--font-inter)] text-[7px] text-[#8a92a0]">
-
             <span className="flex items-center gap-1">
               <Clock3 size={9} />
               {workout.duration} min
@@ -70,10 +66,8 @@ export default function WorkoutCard({ workout }) {
               <Star size={9} />
               {workout.rating}
             </span>
-
           </div>
         </div>
-
       </div>
     </Link>
   );

@@ -7,7 +7,13 @@ export async function getWorkouts() {
     throw new Error("Failed to fetch workouts");
   }
 
-  return response.json();
+  const data = await response.json();
+
+  if (!Array.isArray(data)) {
+    throw new Error("Invalid workout data");
+  }
+
+  return data;
 }
 
 export async function getWorkout(id) {
