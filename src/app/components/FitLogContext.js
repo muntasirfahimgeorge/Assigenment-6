@@ -39,19 +39,16 @@ export function FitLogProvider({ children }) {
 
   useEffect(() => {
     if (!loaded) return;
-
     localStorage.setItem("fitlog-plan", JSON.stringify(plan));
   }, [plan, loaded]);
 
   useEffect(() => {
     if (!loaded) return;
-
     localStorage.setItem("fitlog-saved", JSON.stringify(saved));
   }, [saved, loaded]);
 
   useEffect(() => {
     if (!loaded) return;
-
     localStorage.setItem("fitlog-done", JSON.stringify(done));
   }, [done, loaded]);
 
@@ -67,20 +64,14 @@ export function FitLogProvider({ children }) {
     }
 
     setPlan((current) => [...current, workout]);
-
     toast.success(`${workout.name} added to your plan!`);
   }
 
   function removeFromPlan(id) {
     const workout = plan.find((item) => item.id === id);
 
-    setPlan((current) =>
-      current.filter((item) => item.id !== id)
-    );
-
-    setDone((current) =>
-      current.filter((item) => item !== id)
-    );
+    setPlan((current) => current.filter((item) => item.id !== id));
+    setDone((current) => current.filter((item) => item !== id));
 
     if (workout) {
       toast.success(`${workout.name} removed from your plan.`);
@@ -94,16 +85,13 @@ export function FitLogProvider({ children }) {
     }
 
     setSaved((current) => [...current, workout]);
-
     toast.success(`${workout.name} saved for later!`);
   }
 
   function removeSaved(id) {
     const workout = saved.find((item) => item.id === id);
 
-    setSaved((current) =>
-      current.filter((item) => item.id !== id)
-    );
+    setSaved((current) => current.filter((item) => item.id !== id));
 
     if (workout) {
       toast.success(`${workout.name} removed from saved.`);
@@ -130,6 +118,7 @@ export function FitLogProvider({ children }) {
         plan,
         saved,
         done,
+        loaded,
         addToPlan,
         removeFromPlan,
         saveWorkout,

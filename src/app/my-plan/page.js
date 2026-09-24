@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { Clock3, Flame, Star, Check, X } from "lucide-react";
 import { useFitLog } from "../components/FitLogContext";
+import { useState } from "react";
 
 export default function MyPlan() {
   const {
     plan,
     saved,
     done,
+    loaded,
     removeFromPlan,
     removeSaved,
     markAsDone,
@@ -17,20 +18,34 @@ export default function MyPlan() {
 
   const [activeTab, setActiveTab] = useState("plan");
 
+  if (!loaded) {
+    return (
+      <main className="flex min-h-[70vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#333] border-t-[#c2f800]" />
+
+          <p className="font-[var(--font-inter)] text-[8px] font-bold uppercase tracking-[0.15em] text-[#8a92a0]">
+            Loading workouts...
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   const currentItems = activeTab === "plan" ? plan : saved;
 
-  const totalMinutes =
-    plan.reduce((total, item) => total + Number(item.duration || 0), 0);
+  const totalMinutes = plan.reduce(
+    (total, item) => total + Number(item.duration || 0),
+    0
+  );
 
-  const totalCalories =
-    plan.reduce(
-      (total, item) => total + Number(item.caloriesBurned || 0),
-      0
-    );
+  const totalCalories = plan.reduce(
+    (total, item) => total + Number(item.caloriesBurned || 0),
+    0
+  );
 
   return (
     <main className="mx-auto min-h-[70vh] max-w-[1000px] px-5 py-9 sm:px-6">
-
       <div>
         <h1 className="font-[var(--font-oswald)] text-[34px] font-bold uppercase leading-none tracking-[-1px] text-white sm:text-[40px]">
           MY PLAN
@@ -42,26 +57,12 @@ export default function MyPlan() {
       </div>
 
       <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
-
-        <Metric
-          label="Exercises"
-          value={plan.length}
-        />
-
-        <Metric
-          label="Minutes"
-          value={totalMinutes}
-        />
-
-        <Metric
-          label="Calories"
-          value={totalCalories}
-        />
-
+        <Metric label="Exercises" value={plan.length} />
+        <Metric label="Minutes" value={totalMinutes} />
+        <Metric label="Calories" value={totalCalories} />
       </div>
 
       <div className="mt-7 flex border-b border-[#292d34]">
-
         <button
           onClick={() => setActiveTab("plan")}
           className={
@@ -83,12 +84,10 @@ export default function MyPlan() {
         >
           Saved
         </button>
-
       </div>
 
       {currentItems.length === 0 ? (
         <div className="flex min-h-[300px] items-center justify-center text-center">
-
           <div>
             <h2 className="font-[var(--font-oswald)] text-[26px] font-bold uppercase text-white">
               NOTHING HERE YET
@@ -105,17 +104,14 @@ export default function MyPlan() {
               Go to workouts
             </Link>
           </div>
-
         </div>
       ) : (
         <div className="mt-5 space-y-3">
-
           {currentItems.map((workout) => (
             <div
               key={workout.id}
               className="flex flex-col overflow-hidden rounded-[4px] border border-[#292d34] bg-[#15171d] sm:flex-row"
             >
-
               <img
                 src={workout.image}
                 alt={workout.name}
@@ -123,7 +119,6 @@ export default function MyPlan() {
               />
 
               <div className="flex flex-1 flex-col justify-between p-4">
-
                 <div>
                   <h3 className="font-[var(--font-oswald)] text-[15px] font-bold uppercase leading-none text-white">
                     {workout.name}
@@ -134,7 +129,6 @@ export default function MyPlan() {
                   </p>
 
                   <div className="mt-3 flex items-center gap-4 font-[var(--font-inter)] text-[7px] text-[#8a92a0]">
-
                     <span className="flex items-center gap-1">
                       <Clock3 size={9} />
                       {workout.duration} min
@@ -149,12 +143,10 @@ export default function MyPlan() {
                       <Star size={9} />
                       {workout.rating}
                     </span>
-
                   </div>
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-
                   <Link
                     href={`/workout/${workout.id}`}
                     className="rounded-[2px] bg-[#c2f800] px-3 py-2 font-[var(--font-inter)] text-[7px] font-bold uppercase text-black"
@@ -186,17 +178,12 @@ export default function MyPlan() {
                   >
                     <X size={11} />
                   </button>
-
                 </div>
-
               </div>
-
             </div>
           ))}
-
         </div>
       )}
-
     </main>
   );
 }
