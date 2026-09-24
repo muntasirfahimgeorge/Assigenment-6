@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  ArrowLeft,
   Check,
   Clock3,
   Flame,
@@ -24,6 +23,15 @@ export default function MyPlan() {
   } = useFitLog();
 
   const [activeTab, setActiveTab] = useState("plan");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const minutes = plan.reduce(
     (total, workout) => total + Number(workout.duration || 0),
@@ -50,6 +58,20 @@ export default function MyPlan() {
     toast.success(`${workout.name} removed from saved.`);
   }
 
+  if (loading) {
+    return (
+      <main className="flex min-h-[70vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#333] border-t-[#c2f800]" />
+
+          <p className="font-[var(--font-inter)] text-[10px] font-bold uppercase tracking-[0.18em] text-[#8a92a0]">
+            Loading My Plan
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="mx-auto max-w-[1280px] px-6 py-12">
 
@@ -68,7 +90,6 @@ export default function MyPlan() {
       </div>
 
       <div className="mb-10 grid gap-4 sm:grid-cols-3">
-
         <Metric
           label="Exercises"
           value={plan.length}
@@ -84,7 +105,6 @@ export default function MyPlan() {
           label="Calories"
           value={calories}
         />
-
       </div>
 
       <div className="mb-8 flex border-b border-[#222630]">
@@ -115,11 +135,8 @@ export default function MyPlan() {
 
       {activeTab === "plan" && (
         <section>
-
           {plan.length === 0 ? (
-            <EmptyState
-              text="Browse the library and add a lift to get today moving."
-            />
+            <EmptyState text="Browse the library and add a lift to get today moving." />
           ) : (
             <div className="space-y-4">
 
@@ -141,7 +158,6 @@ export default function MyPlan() {
                     </Link>
 
                     <div>
-
                       <h3
                         className={
                           isDone
@@ -174,7 +190,6 @@ export default function MyPlan() {
                         </span>
 
                       </div>
-
                     </div>
 
                     <div className="flex flex-col gap-2 sm:min-w-[145px]">
@@ -215,17 +230,13 @@ export default function MyPlan() {
 
             </div>
           )}
-
         </section>
       )}
 
       {activeTab === "saved" && (
         <section>
-
           {saved.length === 0 ? (
-            <EmptyState
-              text="Save workouts from the library to find them here."
-            />
+            <EmptyState text="Save workouts from the library to find them here." />
           ) : (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
@@ -297,7 +308,6 @@ export default function MyPlan() {
 
             </div>
           )}
-
         </section>
       )}
 

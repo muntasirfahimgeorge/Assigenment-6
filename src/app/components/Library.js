@@ -4,25 +4,10 @@ import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import WorkoutCard from "./WorkoutCard";
 
-const figmaOrder = [
-  "Barbell Bench Press",
-  "Pull-Up",
-  "Back Squat",
-  "Overhead Press",
-  "Dumbbell Bicep Curl",
-  "Dumbbell Bicep Curl",
-  "Hollow-Body Plank",
-  "Dumbbell Bicep Curl",
-  "Conventional Deadlift",
-  "Push-Up",
-  "Walking Lunge",
-  "Russian Twist",
-];
-
 export default function Library() {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState("figma");
+  const [sortBy, setSortBy] = useState("");
 
   useEffect(() => {
     fetch("https://api.abcz.workers.dev/api/fitlog")
@@ -42,14 +27,43 @@ export default function Library() {
       });
   }, []);
 
-  const orderedWorkouts = figmaOrder
-    .map((name) => workouts.find((workout) => workout.name === name))
+  const defaultOrder = [
+    "Barbell Bench Press",
+    "Pull-up",
+    "Back Squat",
+    "Overhead Press",
+    "Dumbbell Bicep Curl",
+    "Dumbbell Bicep Curl",
+    "Hollow-Body Plank",
+    "Dumbbell Bicep Curl",
+    "Conventional Deadlift",
+    "Push-up",
+    "Walking Lunge",
+    "Russian Twist",
+  ];
+
+  const findWorkout = (name) => {
+    return workouts.find(
+      (workout) =>
+        workout.name.toLowerCase() === name.toLowerCase()
+    );
+  };
+
+  const orderedWorkouts = defaultOrder
+    .map((name) => findWorkout(name))
     .filter(Boolean);
 
   const displayWorkouts =
-    sortBy === "figma"
+    sortBy === ""
       ? orderedWorkouts
       : [...workouts].sort((a, b) => {
+          if (sortBy === "duration") {
+            return (
+              Number(a.duration || 0) -
+              Number(b.duration || 0)
+            );
+          }
+
           if (sortBy === "calories") {
             return (
               Number(b.caloriesBurned || 0) -
@@ -58,10 +72,13 @@ export default function Library() {
           }
 
           if (sortBy === "rating") {
-            return Number(b.rating || 0) - Number(a.rating || 0);
+            return (
+              Number(b.rating || 0) -
+              Number(a.rating || 0)
+            );
           }
 
-          return Number(a.duration || 0) - Number(b.duration || 0);
+          return 0;
         });
 
   return (
@@ -91,8 +108,8 @@ export default function Library() {
               onChange={(event) => setSortBy(event.target.value)}
               className="appearance-none bg-transparent pr-5 text-xs font-medium text-white outline-none"
             >
-              <option value="figma" className="bg-[#15171d]">
-                Default
+              <option value="" className="bg-[#15171d]">
+                Select
               </option>
 
               <option value="duration" className="bg-[#15171d]">
@@ -122,7 +139,21 @@ export default function Library() {
         </div>
       )}
 
-      {!loading && (
+      {!loading && workouts.length === 0 && (
+        <div className="flex min-h-[400px] items-center justify-center text-center">
+          <div>
+            <h3 className="font-[var(--font-oswald)] text-2xl font-bold uppercase">
+              NO WORKOUTS FOUND
+            </h3>
+
+            <p className="mt-2 text-sm text-[#8a92a0]">
+              Unable to load the workout library.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {!loading && workouts.length > 0 && (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {displayWorkouts.map((workout, index) => (
             <WorkoutCard

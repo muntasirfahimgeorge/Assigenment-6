@@ -12,60 +12,79 @@ export function FitLogProvider({ children }) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const savedPlan = localStorage.getItem("fitlog-plan");
-    const savedWorkouts = localStorage.getItem("fitlog-saved");
-    const savedDone = localStorage.getItem("fitlog-done");
+    try {
+      const storedPlan = localStorage.getItem("fitlog-plan");
+      const storedSaved = localStorage.getItem("fitlog-saved");
+      const storedDone = localStorage.getItem("fitlog-done");
 
-    if (savedPlan) {
-      setPlan(JSON.parse(savedPlan));
-    }
+      if (storedPlan) {
+        setPlan(JSON.parse(storedPlan));
+      }
 
-    if (savedWorkouts) {
-      setSaved(JSON.parse(savedWorkouts));
-    }
+      if (storedSaved) {
+        setSaved(JSON.parse(storedSaved));
+      }
 
-    if (savedDone) {
-      setDone(JSON.parse(savedDone));
+      if (storedDone) {
+        setDone(JSON.parse(storedDone));
+      }
+    } catch {
+      localStorage.removeItem("fitlog-plan");
+      localStorage.removeItem("fitlog-saved");
+      localStorage.removeItem("fitlog-done");
     }
 
     setLoaded(true);
   }, []);
 
   useEffect(() => {
-    if (loaded) {
-      localStorage.setItem("fitlog-plan", JSON.stringify(plan));
-    }
+    if (!loaded) return;
+
+    localStorage.setItem("fitlog-plan", JSON.stringify(plan));
   }, [plan, loaded]);
 
   useEffect(() => {
-    if (loaded) {
-      localStorage.setItem("fitlog-saved", JSON.stringify(saved));
-    }
+    if (!loaded) return;
+
+    localStorage.setItem("fitlog-saved", JSON.stringify(saved));
   }, [saved, loaded]);
 
   useEffect(() => {
-    if (loaded) {
-      localStorage.setItem("fitlog-done", JSON.stringify(done));
-    }
+    if (!loaded) return;
+
+    localStorage.setItem("fitlog-done", JSON.stringify(done));
   }, [done, loaded]);
 
   function addToPlan(workout) {
-    if (plan.length >= 5) {
-      toast.warning("Today's plan is limited to 5 workouts.");
-      return;
-    }
-
     if (plan.some((item) => item.id === workout.id)) {
       toast.warning(`${workout.name} is already in your plan!`);
       return;
     }
 
+    if (plan.length >= 5) {
+      toast.warning("Today's plan is limited to 5 workouts.");
+      return;
+    }
+
     setPlan((current) => [...current, workout]);
+
     toast.success(`${workout.name} added to your plan!`);
   }
 
   function removeFromPlan(id) {
-    setPlan((current) => current.filter((item) => item.id !== id));
+    const workout = plan.find((item) => item.id === id);
+
+    setPlan((current) =>
+      current.filter((item) => item.id !== id)
+    );
+
+    setDone((current) =>
+      current.filter((item) => item !== id)
+    );
+
+    if (workout) {
+      toast.success(`${workout.name} removed from your plan.`);
+    }
   }
 
   function saveWorkout(workout) {
@@ -75,11 +94,20 @@ export function FitLogProvider({ children }) {
     }
 
     setSaved((current) => [...current, workout]);
+
     toast.success(`${workout.name} saved for later!`);
   }
 
   function removeSaved(id) {
-    setSaved((current) => current.filter((item) => item.id !== id));
+    const workout = saved.find((item) => item.id === id);
+
+    setSaved((current) =>
+      current.filter((item) => item.id !== id)
+    );
+
+    if (workout) {
+      toast.success(`${workout.name} removed from saved.`);
+    }
   }
 
   function markAsDone(id) {
@@ -87,7 +115,13 @@ export function FitLogProvider({ children }) {
       return;
     }
 
+    const workout = plan.find((item) => item.id === id);
+
     setDone((current) => [...current, id]);
+
+    if (workout) {
+      toast.success(`${workout.name} marked as done!`);
+    }
   }
 
   return (

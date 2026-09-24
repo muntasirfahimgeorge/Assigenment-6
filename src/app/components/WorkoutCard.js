@@ -4,12 +4,14 @@ import { Clock3, Flame, Star } from "lucide-react";
 const workoutTags = {
   "Barbell Bench Press": ["CHEST", "ARMS"],
   "Pull-Up": ["BACK", "ARMS"],
-  "Back Squat": ["LEGS", "GLUTES"],
+  "Pull-up": ["BACK", "ARMS"],
+  "Back Squat": ["LEGS", "CORE"],
   "Overhead Press": ["SHOULDERS", "ARMS"],
-  "Dumbbell Bicep Curl": ["ARMS", "DUMBBELL"],
+  "Dumbbell Bicep Curl": ["ARMS"],
   "Hollow-Body Plank": ["CORE"],
-  "Conventional Deadlift": ["BACK", "GLUTES"],
+  "Conventional Deadlift": ["BACK", "LEGS"],
   "Push-Up": ["CHEST", "ARMS", "CORE"],
+  "Push-up": ["CHEST", "ARMS", "CORE"],
   "Walking Lunge": ["LEGS"],
   "Russian Twist": ["CORE"],
 };
@@ -36,7 +38,7 @@ export default function WorkoutCard({ workout }) {
           {tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex h-[21px] items-center rounded-full bg-[#c2f800] px-[10px] py-[2px] font-sans text-[11px] font-bold uppercase leading-[1.5] tracking-[0.55px] text-black"
+              className="inline-flex h-[21px] items-center rounded-full bg-[#c2f800] px-[10px] py-[2px] font-[var(--font-inter)] text-[11px] font-bold uppercase leading-[1.5] tracking-[0.55px] text-black"
             >
               {tag}
             </span>

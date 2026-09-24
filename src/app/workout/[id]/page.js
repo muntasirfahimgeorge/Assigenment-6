@@ -3,30 +3,24 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import {
-  Bookmark,
-  Check,
-  Clock3,
-  Flame,
-  Star,
-  Dumbbell,
-} from "lucide-react";
+import { Bookmark, Check } from "lucide-react";
 import { useFitLog } from "../../components/FitLogContext";
 import { getWorkout } from "../../lib/api";
 
 const workoutTags = {
   "Barbell Bench Press": ["Chest", "Arms"],
   "Pull-Up": ["Back", "Arms"],
-  "Back Squat": ["Legs", "Barbell"],
+  "Pull-up": ["Back", "Arms"],
+  "Back Squat": ["Legs", "Core"],
   "Overhead Press": ["Shoulders", "Arms"],
-  "Dumbbell Bicep Curl": ["Arms", "Dumbbell"],
+  "Dumbbell Bicep Curl": ["Arms"],
+  "Hollow-Body Plank": ["Core"],
   "Hollow-body Plank": ["Core"],
-  "Conventional Deadlift": ["Back", "Barbell"],
-  "Push-Up": ["Chest", "Arms"],
+  "Conventional Deadlift": ["Back", "Legs"],
+  "Push-Up": ["Chest", "Arms", "Core"],
+  "Push-up": ["Chest", "Arms", "Core"],
   "Walking Lunge": ["Legs"],
   "Russian Twist": ["Core"],
-  "Kettlebell Swing": ["Glutes", "Kettlebell"],
-  Burpee: ["Full Body"],
 };
 
 export default function WorkoutDetails() {
@@ -35,7 +29,6 @@ export default function WorkoutDetails() {
 
   const [workout, setWorkout] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!id) return;
@@ -46,7 +39,6 @@ export default function WorkoutDetails() {
         setLoading(false);
       })
       .catch(() => {
-        setError("Workout not found");
         setLoading(false);
       });
   }, [id]);
@@ -59,17 +51,21 @@ export default function WorkoutDetails() {
     );
   }
 
-  if (error || !workout) {
+  if (!workout) {
     return (
-      <main className="flex min-h-[70vh] items-center justify-center px-5 text-center">
+      <main className="flex min-h-[70vh] items-center justify-center px-6 text-center">
         <div>
-          <h1 className="text-5xl font-black uppercase">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#ccff00]">
+            404 / NOT FOUND
+          </p>
+
+          <h1 className="mt-3 font-[var(--font-oswald)] text-6xl font-bold uppercase">
             Workout Not Found
           </h1>
 
           <Link
             href="/"
-            className="mt-6 inline-flex bg-[#ccff00] px-6 py-3 text-sm font-black uppercase text-black"
+            className="mt-7 inline-flex rounded-xl bg-[#ccff00] px-6 py-3 text-[10px] font-bold uppercase text-black"
           >
             Back to Workouts
           </Link>
@@ -81,32 +77,32 @@ export default function WorkoutDetails() {
   const tags = workoutTags[workout.name] || [];
 
   return (
-    <main className="mx-auto max-w-[1232px] px-5 py-12">
-      <div className="grid gap-14 lg:grid-cols-2">
+    <main className="mx-auto max-w-[1232px] px-6 py-12">
+      <div className="grid gap-14 lg:grid-cols-[588px_588px]">
 
-        <div className="overflow-hidden">
+        <div className="overflow-hidden rounded-2xl">
           <img
             src={workout.image}
             alt={workout.name}
-            className="h-auto min-h-[735px] w-full rounded-2xl object-cover"
+            className="h-[773px] w-full object-cover"
           />
         </div>
 
         <div>
 
-          <h1 className="text-[40px] font-black uppercase leading-none tracking-[-0.02em]">
+          <h1 className="font-[var(--font-oswald)] text-[36px] font-bold uppercase leading-[1.11] tracking-[-0.9px] text-white">
             {workout.name}
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-[#8a92a0]">
+          <p className="mt-4 text-sm leading-[1.43] text-[#8a92a0]">
             {workout.description}
           </p>
 
-          <div className="mt-5 flex h-6 items-center gap-0">
+          <div className="mt-4 flex flex-wrap gap-2">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex h-6 items-center rounded-full bg-[#ccff00] px-[14px] py-1 text-[11px] font-bold uppercase leading-none text-black"
+                className="inline-flex h-6 items-center rounded-full bg-[#ccff00] px-3.5 text-[11px] font-bold uppercase tracking-[0.55px] text-black"
               >
                 {tag}
               </span>
@@ -152,20 +148,20 @@ export default function WorkoutDetails() {
 
           </div>
 
-          <div className="mt-7">
+          <section className="mt-0">
 
-            <h2 className="text-sm font-black uppercase tracking-[0.12em]">
+            <h2 className="border-b border-[#222630] py-4 font-[var(--font-inter)] text-base font-extrabold uppercase tracking-[0.8px]">
               Instructions
             </h2>
 
-            <ol className="mt-4">
+            <ol>
               {workout.instructions?.slice(0, 4).map(
                 (instruction, index) => (
                   <li
                     key={index}
-                    className="flex gap-4 border-b border-[#222630] py-3 first:pt-0"
+                    className="flex gap-4 border-b border-[#222630] py-3"
                   >
-                    <span className="w-5 shrink-0 text-sm font-bold text-white">
+                    <span className="w-4 shrink-0 text-sm font-medium text-white">
                       {index + 1}.
                     </span>
 
@@ -177,13 +173,13 @@ export default function WorkoutDetails() {
               )}
             </ol>
 
-          </div>
+          </section>
 
-          <div className="mt-8 flex gap-4">
+          <div className="mt-7 flex flex-wrap gap-4">
 
             <button
               onClick={() => addToPlan(workout)}
-              className="flex h-11 items-center justify-center gap-2 rounded-md bg-[#ccff00] px-6 text-sm font-bold text-black transition hover:bg-white"
+              className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#ccff00] px-6 text-sm font-bold text-black transition hover:bg-white"
             >
               <Check size={16} />
               Add to today&apos;s plan
@@ -191,7 +187,7 @@ export default function WorkoutDetails() {
 
             <button
               onClick={() => saveWorkout(workout)}
-              className="flex h-11 items-center justify-center gap-2 rounded-md border border-[#343943] px-6 text-sm font-medium text-white transition hover:border-[#ccff00] hover:text-[#ccff00]"
+              className="flex h-[46px] items-center justify-center gap-2 rounded-xl border border-[#374151] px-6 text-sm font-medium text-white transition hover:border-[#ccff00] hover:text-[#ccff00]"
             >
               <Bookmark size={16} />
               Save for later
@@ -208,7 +204,7 @@ export default function WorkoutDetails() {
 
 function DetailRow({ label, value }) {
   return (
-    <div className="flex min-h-12 items-center justify-between border-b border-[#222630] px-6 last:border-b-0">
+    <div className="flex min-h-[49px] items-center justify-between border-b border-[#222630] px-6 last:border-b-0">
       <span className="text-xs font-bold uppercase tracking-[0.08em] text-[#8a92a0]">
         {label}
       </span>
